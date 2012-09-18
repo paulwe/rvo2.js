@@ -1,0 +1,15 @@
+{
+    "name": "rvo2.js"
+  , "description": "Multi-agent collision avoidance library"
+  , "version": "2.0.1"
+  , "author": "Paul Wells <paulwe@gmail.com>"
+  , "keywords": ["orca", "animation"]
+  , "dependencies": {}
+  , "devDependencies": {
+        "node-minify": ""
+    }
+  , "repository": {
+        "type": "git"
+      , "url": "git://github.com/paulwe/rvo2.js.git"
+    }
+}

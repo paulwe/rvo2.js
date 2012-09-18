@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>multiagent collision avoidance</title>
+  </head>
+  <body>
+    <canvas height="800" width="800" id="rvo-test"></canvas>
+    <script src="http://github.com/paulwe/rvo2.js/lib/rvo2.min.js"></script>
+    <script>
+    var canvasSize = 800
+      , canvas = document.getElementByid('rvo-test')
+      , sim = new RVO.Simulator(2, 50, 5, 10, 10, 7, 1, [0, 0])
+      , goals = []
+      , altgoals = []
+      , colors = []
+      , obstacles = []
+      , center = [canvasSize / 2, canvasSize / 2]
+      , total = 100
+      , stepTime = 13
+      , ivl = setInterval(doStep, stepTime);
+
+    for (var angle = Math.PI / total; angle < Math.PI * 2; angle += Math.PI / (.5 * total)) {
+      var point = RVO.Vector.multiply([Math.sin(angle), Math.cos(angle)], canvasSize * .48)
+        , rgb = HSVtoRGB(Math.round(360 * (angle / (Math.PI * 2))), 1, 255);
+
+      sim.addAgent(RVO.Vector.add(center, point));
+      goals.push(RVO.Vector.subtract(center, point));
+      altgoals.push(RVO.Vector.add(center, point));
+      colors.push('rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ', .75)');
+    }
+
+    function reachedGoals() {
+      for (var i = 0, len = sim.agents.length; i < len; i ++) {
+        if (RVO.Vector.absSq(RVO.Vector.subtract(sim.agents[i].position, goals[i])) < Math.pow(1, 2)) {
+          var temp = goals[i];
+          goals[i] = altgoals[i];
+          altgoals[i] = temp;
+        }
+      }
+    }
+
+    function setPreferredVelocities() {
+      for (var i = 0, len = sim.agents.length; i < len; i ++) {
+        var goalVector = RVO.Vector.subtract(goals[i], sim.agents[i].position);
+        if (RVO.Vector.absSq(goalVector) > 1) {
+          goalVector = RVO.Vector.normalize(goalVector);
+        }
+        sim.agents[i].prefVelocity = goalVector;
+      }
+    }
+
+    function updateVisualization() {
+      var ctx = canvas.getContext('2d');
+
+      ctx.clearRect(0, 0, canvasSize, canvasSize);
+
+      for (var i = 0, len = sim.agents.length; i < len; i ++) {
+        var agent = sim.agents[i];
+        ctx.beginPath();
+        ctx.arc(agent.position[0], agent.position[1], agent.radius * .9, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.fillStyle = colors[i];
+        ctx.fill();
+      }
+    }
+
+    function doStep() {
+      if (reachedGoals()) {
+        clearInterval(ivl);
+        clearInterval(profIvl);
+      }
+      else {
+        updateVisualization();
+        setPreferredVelocities();
+        sim.doStep();
+      }
+    }
+
+    function HSVtoRGB(h, s, v) {
+      var r, g, b;
+      if( s == 0 ) {
+        r = g = b = v;
+        return;
+      }
+      var h = h / 60
+        , i = Math.floor(h)
+        , f = h - i
+        , p = v * (1 - s)
+        , q = v * (1 - s * f)
+        , t = v * (1 - s * (1 - f));
+      switch(i) {
+        case 0:
+          r = v;
+          g = t;
+          b = p;
+          break;
+        case 1:
+          r = q;
+          g = v;
+          b = p;
+          break;
+        case 2:
+          r = p;
+          g = v;
+          b = t;
+          break;
+        case 3:
+          r = p;
+          g = q;
+          b = v;
+          break;
+        case 4:
+          r = t;
+          g = p;
+          b = v;
+          break;
+        default:
+          r = v;
+          g = p;
+          b = q;
+          break;
+      }
+      return {
+        r: Math.round(r),
+        g: Math.round(g),
+        b: Math.round(b)
+      }
+    }
+    </script>
+  </body>
+</html>
