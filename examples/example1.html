@@ -5,10 +5,10 @@
   </head>
   <body>
     <canvas height="800" width="800" id="rvo-test"></canvas>
-    <script src="http://github.com/paulwe/rvo2.js/lib/rvo2.min.js"></script>
+    <script type="text/javascript" src="http://paulwe.github.com/rvo2.js/lib/rvo2.min.js"></script>
     <script>
     var canvasSize = 800
-      , canvas = document.getElementByid('rvo-test')
+      , canvas = document.getElementById('rvo-test')
       , sim = new RVO.Simulator(2, 50, 5, 10, 10, 7, 1, [0, 0])
       , goals = []
       , altgoals = []

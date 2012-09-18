@@ -7,9 +7,11 @@ A JavaScript port of UNC's [RVO2](http://gamma.cs.unc.edu/RVO2/) library.
 
 As stated in the RVO2 documentation: local collision avoidance as provided by RVO2 Library should in principle be accompanied by global path planning that determines the preferred velocity of each agent in each time step of the simulation.
 
+[Demo](http://paulwe.github.com/rvo2.js/examples/example1.html)
+
 ### Usage ###
 
-Download the [minified library](https://github.com/paulwe/rvo2.js/blob/master/lib/rvo2.min.js) and include it in your html.
+Download the [minified library](http://paulwe.github.com/rvo2.js/lib/rvo2.min.js) and include it in your html.
 
 ```html
 <script src="js/rvo2.min.js"></script>
