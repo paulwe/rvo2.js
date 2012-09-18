@@ -56,7 +56,7 @@ RVO.Agent.prototype.computeNewVelocity = function() {
       , distSq2 = RVO.Vector.absSq(relativePosition2)
       , radiusSq = RVO.sqr(this.radius)
       , obstacleVector = RVO.Vector.subtract(obstacle2.point, obstacle1.point)
-      , s = RVO.Vector.multiplyVector(RVO.Vector.invert(relativePosition1), obstacleVector) / RVO.Vector.absSq(obstacleVector)
+      , s = RVO.Vector.dotProduct(RVO.Vector.invert(relativePosition1), obstacleVector) / RVO.Vector.absSq(obstacleVector)
       , distSqLine = RVO.Vector.absSq(RVO.Vector.subtract(RVO.Vector.invert(relativePosition1), RVO.Vector.multiply(obstacleVector, s)))
       , line = new Array(2);
 
@@ -142,9 +142,9 @@ RVO.Agent.prototype.computeNewVelocity = function() {
     var leftCutoff = RVO.Vector.multiply(RVO.Vector.subtract(obstacle1.point, this.position), invTimeHorizonObst)
       , rightCutoff = RVO.Vector.multiply(RVO.Vector.subtract(obstacle2.point, this.position), invTimeHorizonObst)
       , cutoffVec = RVO.Vector.subtract(rightCutoff, leftCutoff)
-      , t = (obstacle1 == obstacle2) ? .5 : RVO.Vector.multiplyVector(RVO.Vector.subtract(this.velocity, leftCutoff), cutoffVec) / RVO.Vector.absSq(cutoffVec)
-      , tLeft = RVO.Vector.multiplyVector(RVO.Vector.subtract(this.velocity, leftCutoff), leftLegDirection)
-      , tRight = RVO.Vector.multiplyVector(RVO.Vector.subtract(this.velocity, rightCutoff), rightLegDirection);
+      , t = (obstacle1 == obstacle2) ? .5 : RVO.Vector.dotProduct(RVO.Vector.subtract(this.velocity, leftCutoff), cutoffVec) / RVO.Vector.absSq(cutoffVec)
+      , tLeft = RVO.Vector.dotProduct(RVO.Vector.subtract(this.velocity, leftCutoff), leftLegDirection)
+      , tRight = RVO.Vector.dotProduct(RVO.Vector.subtract(this.velocity, rightCutoff), rightLegDirection);
 
     if ((t < 0 && tLeft < 0) || (obstacle1 == obstacle2 && tLeft < 0 && tRight < 0)) {
       var unitW = RVO.Vector.normalize(RVO.Vector.subtract(this.velocity, leftCutoff));
@@ -208,7 +208,7 @@ RVO.Agent.prototype.computeNewVelocity = function() {
     if (distSq > combinedRadiusSq) {
       var w = RVO.Vector.subtract(relativeVelocity, RVO.Vector.multiply(relativePosition, invTimeHorizon))
         , wLengthSq = RVO.Vector.absSq(w)
-        , dotProduct1 = RVO.Vector.multiplyVector(w, relativePosition);
+        , dotProduct1 = RVO.Vector.dotProduct(w, relativePosition);
 
       if (dotProduct1 < 0 && RVO.sqr(dotProduct1) > combinedRadiusSq * wLengthSq) {
         var wLength = Math.sqrt(wLengthSq)
@@ -227,7 +227,7 @@ RVO.Agent.prototype.computeNewVelocity = function() {
           line[1] = RVO.Vector.divide(RVO.Vector.invert([relativePosition[0] * leg - relativePosition[1] * combinedRadius, relativePosition[0] * combinedRadius + relativePosition[1] * leg]), distSq)
         }
 
-        var dotProduct2 = RVO.Vector.multiplyVector(relativeVelocity, line[1])
+        var dotProduct2 = RVO.Vector.dotProduct(relativeVelocity, line[1])
           , u = RVO.Vector.multiply(RVO.Vector.subtract(line[1], relativeVelocity), dotProduct2);
       }
     }
@@ -299,7 +299,7 @@ RVO.Agent.prototype.update = function() {
 }
 
 RVO.Agent.linearProgram1 = function(lines, lineNo, radius, optVelocity, directionOpt, result) {
-  var dotProduct = RVO.Vector.multiplyVector(lines[lineNo][0], lines[lineNo][1])
+  var dotProduct = RVO.Vector.dotProduct(lines[lineNo][0], lines[lineNo][1])
     , discriminant = RVO.sqr(dotProduct) + RVO.sqr(radius) - RVO.Vector.absSq(lines[lineNo][0]);
 
   if (discriminant < 0) {
@@ -338,7 +338,7 @@ RVO.Agent.linearProgram1 = function(lines, lineNo, radius, optVelocity, directio
   }
 
   if (directionOpt) {
-    if (RVO.Vector.multiplyVector(optVelocity, lines[lineNo][1]) > 0) {
+    if (RVO.Vector.dotProduct(optVelocity, lines[lineNo][1]) > 0) {
       RVO.Vector.set(result, RVO.Vector.add(lines[lineNo][0], RVO.Vector.multiply(lines[lineNo][1], tRight)));
     }
     else {
@@ -346,7 +346,7 @@ RVO.Agent.linearProgram1 = function(lines, lineNo, radius, optVelocity, directio
     }
   }
   else {
-    t = RVO.Vector.multiplyVector(lines[lineNo][1], RVO.Vector.subtract(optVelocity, lines[lineNo][0]));
+    t = RVO.Vector.dotProduct(lines[lineNo][1], RVO.Vector.subtract(optVelocity, lines[lineNo][0]));
 
     if (t < tLeft) {
       RVO.Vector.set(result, RVO.Vector.add(lines[lineNo][0], RVO.Vector.multiply(lines[lineNo][1], tLeft)));
@@ -398,7 +398,7 @@ RVO.Agent.linearProgram3 = function(lines, numObstLines, beginLine, radius, resu
           , determinant = RVO.Vector.det(lines[i][1], lines[j][1]);
 
         if (Math.abs(determinant) <= RVO.EPSILON) {
-          if (RVO.Vector.multiplyVector(lines[i][1], lines[j][1]) > 0) {
+          if (RVO.Vector.dotProduct(lines[i][1], lines[j][1]) > 0) {
             continue;
           }
           else {

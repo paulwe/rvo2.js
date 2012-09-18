@@ -6,7 +6,7 @@ RVO.Vector.invert = function(a) {
   return [- a[0], - a[1]];
 }
 
-RVO.Vector.multiplyVector = function(a, b) {
+RVO.Vector.dotProduct = function(a, b) {
   return a[0] * b[0] + a[1] * b[1];
 }
 
@@ -39,11 +39,11 @@ RVO.Vector.set = function(a, b) {
 }
 
 RVO.Vector.abs = function(a) {
-  return Math.sqrt(RVO.Vector.multiplyVector(a, a));
+  return Math.sqrt(RVO.Vector.dotProduct(a, a));
 }
 
 RVO.Vector.absSq = function(a) {
-  return RVO.Vector.multiplyVector(a, a);
+  return RVO.Vector.dotProduct(a, a);
 }
 
 RVO.Vector.det = function(a, b) {
@@ -60,7 +60,7 @@ RVO.Vector.leftOf = function(a, b, c) {
 
 RVO.Vector.distSqPointLineSegment = function(a, b, c) {
   var ba = RVO.Vector.subtract(b, a)
-    , r = RVO.Vector.multiplyVector(RVO.Vector.subtract(c, a), ba) / RVO.Vector.absSq(ba);
+    , r = RVO.Vector.dotProduct(RVO.Vector.subtract(c, a), ba) / RVO.Vector.absSq(ba);
 
   if (r < 0) {
     return RVO.Vector.absSq(RVO.Vector.subtract(c, a));
