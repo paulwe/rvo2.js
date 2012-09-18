@@ -9,7 +9,7 @@ As stated in the RVO2 documentation: local collision avoidance as provided by RV
 
 ### Usage ###
 
-Download the [minified library](http://pwells.github.com/rvo2-js/lib/rvo2.min.js) and include it in your html.
+Download the [minified library](http://paulwe.github.com/rvo2.js/lib/rvo2.min.js) and include it in your html.
 
 ```html
 <script src="js/rvo2.min.js"></script>
