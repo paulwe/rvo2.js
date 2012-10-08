@@ -1,6 +1,6 @@
 var RVO = RVO || {};
 
-RVO.obstacle = function() {
+RVO.Obstacle = function() {
   this.isConvex = false;
   this.nextobstacle = 0;
   this.point = [0, 0];
