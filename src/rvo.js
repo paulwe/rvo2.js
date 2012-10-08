@@ -2,7 +2,7 @@ var RVO = RVO || {};
 
 RVO.EPSILON = .00001;
 
-RVO.defaultAgent = {
+RVO.agentDefaults = {
   neighborDist: 50,
   maxNeighbors: 5,
   maxSpeed: 1,

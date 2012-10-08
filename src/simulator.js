@@ -6,28 +6,28 @@ RVO.Simulator = function(timeStep, neighborDist, maxNeighbors, timeHorizon, time
   this.globalTime = 0;
   this.obstacles = [];
   this.kdTree = new RVO.KdTree(this);
-  this.defaultAgent = {};
+  this.agentDefaults = {};
 
-  this.defaultAgent.neighborDist = neighborDist || RVO.agentDefaults.neighborDist;
-  this.defaultAgent.maxNeighbors = maxNeighbors || RVO.agentDefaults.maxNeighbors;
-  this.defaultAgent.maxSpeed = maxSpeed || RVO.agentDefaults.maxSpeed;
-  this.defaultAgent.radius = radius || RVO.agentDefaults.radius;
-  this.defaultAgent.timeHorizon = timeHorizon || RVO.agentdefaults.timeHorizon;
-  this.defaultAgent.timeHorizonObst = timeHorizonObst || RVO.agentDefaults.timeHorizonObst;
-  this.defaultAgent.velocity = velocity || RVO.agentdefaults.velocity;
+  this.agentDefaults.neighborDist = neighborDist || RVO.agentDefaults.neighborDist;
+  this.agentDefaults.maxNeighbors = maxNeighbors || RVO.agentDefaults.maxNeighbors;
+  this.agentDefaults.maxSpeed = maxSpeed || RVO.agentDefaults.maxSpeed;
+  this.agentDefaults.radius = radius || RVO.agentDefaults.radius;
+  this.agentDefaults.timeHorizon = timeHorizon || RVO.agentdefaults.timeHorizon;
+  this.agentDefaults.timeHorizonObst = timeHorizonObst || RVO.agentDefaults.timeHorizonObst;
+  this.agentDefaults.velocity = velocity || RVO.agentdefaults.velocity;
 }
 
 RVO.Simulator.prototype.addAgent = function(position, neighborDist, maxNeighbors, timeHorizon, timeHorizonObst, radius, maxSpeed, velocity) {
   var agent = new RVO.Agent(this);
 
-  agent.position = position || this.defaultAgent.position;
-  agent.maxNeighbors = maxNeighbors || this.defaultAgent.maxNeighbors;
-  agent.maxSpeed = maxSpeed || this.defaultAgent.maxSpeed;
-  agent.neighborDist = neighborDist || this.defaultAgent.neighborDist;
-  agent.radius = radius || this.defaultAgent.radius;
-  agent.timeHorizon = timeHorizon || this.defaultAgent.timeHorizon;
-  agent.timeHorizonObst = timeHorizonObst || this.defaultAgent.timeHorizonObst;
-  agent.velocity = velocity || this.defaultAgent.velocity;
+  agent.position = position || this.agentDefaults.position;
+  agent.maxNeighbors = maxNeighbors || this.agentDefaults.maxNeighbors;
+  agent.maxSpeed = maxSpeed || this.agentDefaults.maxSpeed;
+  agent.neighborDist = neighborDist || this.agentDefaults.neighborDist;
+  agent.radius = radius || this.agentDefaults.radius;
+  agent.timeHorizon = timeHorizon || this.agentDefaults.timeHorizon;
+  agent.timeHorizonObst = timeHorizonObst || this.agentDefaults.timeHorizonObst;
+  agent.velocity = velocity || this.agentDefaults.velocity;
   agent.id = this.agents.length;
 
   this.agents.push(agent);
