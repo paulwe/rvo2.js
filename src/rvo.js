@@ -16,7 +16,7 @@ RVO.sqr = function(a) {
 }
 
 if (typeof define === "function" && define.amd && define.amd.RVO) {
-	define('RVO', [], function () {
+  define('RVO', [], function () {
     return RVO;
   });
 }
